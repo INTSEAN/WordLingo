@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 
 function Info(props) {
   const [tab, setTab] = useState("transcription");
-  const { output } = props;
+  const { output, finished } = props;
   const [translation, setTranslation] = useState(null);
   const [translating, setTranslating] = useState(null);
   const [toLanguage, setToLanguage] = useState("Select Language");
@@ -50,7 +50,7 @@ function Info(props) {
   const textElement =
     tab === "transcription"
       ? output.map((val) => val.text)
-      : translation || "No Translation";
+      : translation || "No Translation yet";
 
   function handleCopy() {
     navigator.clipboard.writeText(textElement);
@@ -117,8 +117,14 @@ function Info(props) {
           Translation
         </button>
       </div>
-      <div className="my-8 flex flex-col">
-        {tab == "transcription" ? (
+      <div className="my-8 flex flex-col-reverse max-w-prose w-full mx-auto gap-4">
+        {(!finished || translating) && (
+          <div className="grid place-items-center">
+            <i className="fa-solid fa-spinner animate-spin"></i>
+          </div>
+        )}
+
+        {tab === "transcription" ? (
           <Transcription {...props} textElement={textElement} />
         ) : (
           <Translation
@@ -145,7 +151,7 @@ function Info(props) {
           title="Download"
           className="specialBtn text-purple-400 px-2 aspect-square grid place-items-center rounded"
         >
-          <i class="fa-solid fa-download"></i>
+          <i className="fa-solid fa-download"></i>
         </button>
       </div>
     </main>

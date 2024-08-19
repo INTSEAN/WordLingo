@@ -1,5 +1,6 @@
 import HomePage from "./components/HomePage";
 import Header from "./components/Header";
+import "@xenova/transformers";
 import FileDisplay from "./components/FileDisplay";
 import Transcribing from "./components/Transcribing";
 import Info from "./components/Info";
@@ -12,7 +13,7 @@ function App() {
   const [output, setOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
-  const [download, setDownloading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const isAudioAvailable = file || audioStr;
 
@@ -88,7 +89,7 @@ function App() {
         <section className="min-h-screen flex flex-col">
           <Header />
           {output ? (
-            <Info output={output} />
+            <Info output={output} finished={finished} />
           ) : loading ? (
             <Transcribing />
           ) : isAudioAvailable ? (

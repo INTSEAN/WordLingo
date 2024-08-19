@@ -1,14 +1,16 @@
-import { pipeline } from '@xenova/transformers'
+import {pipeline, env} from '@xenova/transformers';
 import { MessageTypes } from './presets'
+env.allowLocalModels = false;
 
 class MyTranscriptionPipeline {
     static task = 'automatic-speech-recognition'
-    static model = `openai/whisper-tiny.en`
+    static model = 'Xenova/whisper-base' //`openai/whisper-tiny.en` 
+    // static model = 'Xenova/nllb-200-distilled-600M';    
     static instance = null
 
     static async getInstance(progress_callback = null) {
         if (this.instance === null) {
-            this.instance = await pipeline(this.task, null, { progress_callback })
+            this.instance = await pipeline(this.task, this.model, { progress_callback })
         }
 
         return this.instance
@@ -27,11 +29,25 @@ async function transcribe(audio) {
 
     let pipeline
 
+    // try {
+    //     pipeline = await MyTranscriptionPipeline.getInstance(load_model_callback)
+    // } catch (err) {
+    //     console.log(err.message)
+    // }
     try {
-        pipeline = await MyTranscriptionPipeline.getInstance(load_model_callback)
+        console.log('Loading model...');
+        pipeline = await MyTranscriptionPipeline.getInstance(load_model_callback);
+        console.log('Pipeline loaded:', pipeline);
     } catch (err) {
-        console.log(err.message)
+        console.error('Error loading model:', err.message);
+        // Additional logging to capture the response body
+        console.error('Failed to load model. Possible HTML response:', err);
     }
+    
+
+    console.log('Pipeline: After', pipeline);
+
+    
 
     sendLoadingMessage('success')
 

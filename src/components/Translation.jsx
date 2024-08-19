@@ -1,5 +1,5 @@
 import React from "react";
-import { LANGUAGES } from "../utils/presets";
+import { LANGUAGES } from "../utils/presets.js";
 
 function Translation(props) {
   const {
@@ -7,7 +7,6 @@ function Translation(props) {
     toLanguage,
     translating,
     setToLanguage,
-    setTranslating,
     generateTranslation,
   } = props;
 
@@ -19,14 +18,14 @@ function Translation(props) {
             <p className="text-xs sm:text-sm font-medium text-slate-500 mr-auto">
               To Language
             </p>
-            <dir className="flex items-stretch gap-2">
+            <div className="flex items-stretch gap-2">
               <select
-                className="flex-1 outline-none bg-white focus:outline-none borber
+                className="flex-1 outline-none bg-white focus:outline-none border
              border-solid border-transparent duration-200 p-2 rounded hover:border-purple-400"
                 value={toLanguage}
                 onChange={(e) => setToLanguage(e.target.value)}
               >
-                <option value={"Select Language"} disabled></option>
+                <option value={"Select Language"} defaultChecked></option>
                 {Object.entries(LANGUAGES).map(([key, value]) => {
                   return (
                     <option key={key} value={value}>
@@ -41,7 +40,7 @@ function Translation(props) {
               >
                 Translate
               </button>
-            </dir>
+            </div>
           </div>
         )}
         {textElement && !translating && <p> {textElement} </p>}
